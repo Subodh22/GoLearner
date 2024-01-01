@@ -51,7 +51,13 @@ func main() {
 	v1router.Get("/healthz", handlerReadiness)
 	v1router.Get("/err", handlerErrors)
 	v1router.Post("/addUser", apiCfg.handleCreateUser)
+	v1router.Get("/getUser", apiCfg.middlewareAuth(apiCfg.handleGetUser))
+	v1router.Post("/addFeed", apiCfg.middlewareAuth(apiCfg.handleCreateFeed))
+	v1router.Get("/getFeed", apiCfg.handleGetFeeds)
+	v1router.Post("/addFeedToFollow", apiCfg.middlewareAuth(apiCfg.handleFeedFollows))
+
 	router.Mount("/v1", v1router)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: router,
